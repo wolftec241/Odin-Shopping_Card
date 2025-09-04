@@ -1,0 +1,31 @@
+:root{
+  --navbar-background: #2a87ff
+}
+
+.navbar {
+  display: flex;
+  gap: 2rem;
+  background: var(--navbar-background);
+  width: 100%;
+  padding: 1rem 4rem;
+  box-sizing: border-box;
+  color: white;
+  justify-content: space-between;
+}
+
+.navbar-left, 
+.navbar-right{
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
