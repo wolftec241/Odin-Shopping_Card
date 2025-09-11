@@ -10,7 +10,7 @@ export default function Navbar() {
             <Link to="/shop">Shop</Link>
         </div>
         <div className="navbar-right">
-            <a href="/cart">Cart</a>
+            <Link to="/cart">Cart</Link>
         </div>
     </nav>
   );

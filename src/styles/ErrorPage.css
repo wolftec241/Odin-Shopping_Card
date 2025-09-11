@@ -1,7 +1,11 @@
-/* ErrorPage.css */
+/* ErrorPage.css */ 
+:root{
+    --error-page-link-color: #165bfe;
+}
 
 body{
     justify-self: center;
+
 }
 
 .error-page{
@@ -10,11 +14,15 @@ body{
     justify-content: center;
     align-items: center;
     text-align: center;
-    gap: 5px;
+    gap: 5px;   
+    box-sizing: border-box;
+
 }
 
 
 .error-page > a{
     font-weight: bold;
-    size: 1.4rem;
+    size: 20px;
+    text-decoration: none;
+    color: var(--error-page-link-color);
 }

@@ -1,5 +1,5 @@
 :root{
-  --navbar-background: #2a87ff
+  --navbar-background: #1d524f
 }
 
 .navbar {
@@ -7,9 +7,9 @@
   gap: 2rem;
   background: var(--navbar-background);
   width: 100%;
+  min-width: 320px;
   padding: 1rem 4rem;
   box-sizing: border-box;
-  color: white;
   justify-content: space-between;
 }
 
@@ -21,11 +21,12 @@
 }
 
 .navbar a {
-  color: white;
   text-decoration: none;
   font-weight: 500;
+  font-size: 2rem;
+  color: white;
 }
 
 .navbar a:hover {
-  text-decoration: underline;
+  text-decoration: underline; 
 }
