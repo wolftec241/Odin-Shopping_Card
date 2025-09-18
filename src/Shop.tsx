@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router';
+import minusIcon from './assets/minus-circle.svg';
+import plusIcon from './assets/plus-circle.svg';
+
 
 
 function Shop() {
@@ -60,18 +64,60 @@ function ProductList(){
 }
 
 function ProductCard({ data }: { data: Product }){
+  const [addedCount, setAddedCount] = useState<number>(0);
+
+  const handleAddToCart = () => { 
+    if(addedCount < 30){
+      setAddedCount(addedCount + 1);
+    }
+  };
+
+  const handleRemoveFromCart = () => {
+    if (addedCount > 0) {
+      setAddedCount(addedCount - 1);
+    }
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = parseInt(e.target.value);
+    if (isNaN(value) || value < 0) {
+      value = 0;
+    } else if (value >= 30) {
+      value = 30;
+    }
+    setAddedCount(value);
+  }
+
+
   return(
     <div className="product-card">
       <div className="product-card-top">
         <div className='product-image'>
           <img src={data.image} alt={data.title} />
         </div>
-        <h3 className='product-title'>{data.title}</h3>
+        <Link to={`/product/${data.id}`} className='product-title'>{data.title}</Link>
       </div>
 
       <div className='product-card-bottom'>
-        <p className='product-price'>{'$' + data.price}</p>
-        <button className='product-add-button'>Add to Cart</button>
+        <p className='product-price' onClick={handleAddToCart}>{'$' + data.price}</p>
+        {addedCount>0 ? (
+          <div className='added-to-cart-row'>
+            <button className='decrease-product' onClick={handleRemoveFromCart}>
+              <img src={minusIcon} alt='Decrease item' />
+            </button>
+            <input className='added-to-cart-text'
+             value={addedCount}
+             type='number'
+             min={0}
+             max={29}
+             onChange={handleInputChange}/>
+            <button className='increase-product' onClick={handleAddToCart}>
+              <img src={plusIcon} alt='Increase item' />
+            </button>
+          </div>
+        ): (
+        <button className='product-add-button' onClick={handleAddToCart}>Add to Cart</button>
+        )}
       </div>
     </div>
   );
