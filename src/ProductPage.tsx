@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router";
 import axios from "axios";
 import minusIcon from './assets/minus-circle.svg';
 import plusIcon from './assets/plus-circle.svg';
+import {useCart} from './CartProvider';
 
 interface Data {
     id: number;
@@ -19,18 +20,7 @@ function ProductPage(){
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [addedCount, setAddedCount] = useState<number>(0);
-
-  const handleAddToCart = () => { 
-    if(addedCount < 30){
-      setAddedCount(addedCount + 1);
-    }
-  };
-
-  const handleRemoveFromCart = () => {
-    if (addedCount > 0) {
-      setAddedCount(addedCount - 1);
-    }
-  }
+    const { addToCart ,removeFromCart, updateQuantity } = useCart();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -47,6 +37,42 @@ function ProductPage(){
         fetchProduct();
 
     }, [id]);
+
+
+    const handleAddToCart = () => { 
+      if(!product) return;
+      if(addedCount < 30){
+        setAddedCount(addedCount + 1);
+      }
+
+      if(addedCount === 0){
+        addToCart({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        image: product.image,
+        quantity: 1});
+      } 
+      else { 
+        updateQuantity && updateQuantity(product.id, addedCount + 1);
+      }
+    }
+      
+
+    const handleRemoveFromCart = () => {
+      if(!product) return;
+      if (addedCount > 0) {
+        setAddedCount(addedCount - 1);
+      }
+      if(addedCount === 1){
+        removeFromCart(product.id);
+      }
+      else {
+        updateQuantity && updateQuantity(product.id, addedCount - 1);
+      }
+    }
+
+
     if (loading) return <p>Loading product...</p>;
     if (error) return <p>{error}</p>;
     if (!product) return <p>No product found.</p>;

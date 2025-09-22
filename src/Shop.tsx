@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router';
 import minusIcon from './assets/minus-circle.svg';
 import plusIcon from './assets/plus-circle.svg';
-
+import {useCart} from './CartProvider';
 
 
 function Shop() {
@@ -19,9 +19,7 @@ function Shop() {
 interface Product {
   id: number;
   title: string;
-  description: string;
   price: number;
-  category: string;
   image: string;
 }
 
@@ -65,16 +63,38 @@ function ProductList(){
 
 function ProductCard({ data }: { data: Product }){
   const [addedCount, setAddedCount] = useState<number>(0);
+  const { addToCart ,removeFromCart, updateQuantity } = useCart();
 
   const handleAddToCart = () => { 
+    if(!data) return;
     if(addedCount < 30){
       setAddedCount(addedCount + 1);
     }
-  };
+
+    if(addedCount === 0){
+      addToCart({
+      id: data.id,
+      title: data.title,
+      price: data.price,
+      image: data.image,
+      quantity: 1});
+    } 
+    else { 
+      updateQuantity && updateQuantity(data.id, addedCount + 1);
+    }
+  }
+      
 
   const handleRemoveFromCart = () => {
+    if(!data) return;
     if (addedCount > 0) {
       setAddedCount(addedCount - 1);
+    }
+    if(addedCount === 1){
+      removeFromCart(data.id);
+    }
+    else {
+      updateQuantity && updateQuantity(data.id, addedCount - 1);
     }
   }
 
@@ -106,11 +126,11 @@ function ProductCard({ data }: { data: Product }){
               <img src={minusIcon} alt='Decrease item' />
             </button>
             <input className='added-to-cart-text'
-             value={addedCount}
-             type='number'
-             min={0}
-             max={29}
-             onChange={handleInputChange}/>
+            value={addedCount}
+            type='number'
+            min={0}
+            max={29}
+            onChange={handleInputChange}/>
             <button className='increase-product' onClick={handleAddToCart}>
               <img src={plusIcon} alt='Increase item' />
             </button>
